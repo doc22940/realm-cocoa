@@ -150,14 +150,10 @@
 }
 
 - (void)testDynamicTypes {
-    NSDate *now = [NSDate dateWithTimeIntervalSince1970:100000];
-    id obj1 = @[@YES, @1, @1.1f, @1.11, @"string", [NSData dataWithBytes:"a" length:1],
-                now, @YES, @11, NSNull.null];
-
-    StringObject *obj = [[StringObject alloc] init];
-    obj.stringCol = @"string";
-    id obj2 = @[@NO, @2, @2.2f, @2.22, @"string2", [NSData dataWithBytes:"b" length:1],
-                now, @NO, @22, obj];
+    StringObject *so = [[StringObject alloc] init];
+    so.stringCol = @"string";
+    id obj1 = [AllTypesObject values:0 stringObject:nil];
+    id obj2 = [AllTypesObject values:1 stringObject:so];
     @autoreleasepool {
         // open realm in autoreleasepool to create tables and then dispose
         RLMRealm *realm = [RLMRealm realmWithURL:RLMTestRealmURL()];
@@ -170,17 +166,17 @@
     // verify properties
     RLMRealm *dyrealm = [self realmWithTestPathAndSchema:nil];
     RLMResults<RLMObject *> *results = [dyrealm allObjects:AllTypesObject.className];
-    XCTAssertEqual(results.count, (NSUInteger)2, @"Should have 2 objects");
+    XCTAssertEqual(results.count, 2U, @"Should have 2 objects");
 
     RLMObjectSchema *schema = dyrealm.schema[AllTypesObject.className];
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < 11; i++) {
         NSString *propName = [schema.properties[i] name];
-        XCTAssertEqualObjects(obj1[i], results[0][propName]);
-        XCTAssertEqualObjects(obj2[i], results[1][propName]);
+        XCTAssertEqualObjects(obj1[propName], results[0][propName]);
+        XCTAssertEqualObjects(obj2[propName], results[1][propName]);
     }
 
     // check sub object type
-    XCTAssertEqualObjects([schema.properties[9] objectClassName], @"StringObject",
+    XCTAssertEqualObjects([schema.properties[11] objectClassName], @"StringObject",
                           @"Sub-object type in schema should be 'StringObject'");
 
     // check object equality

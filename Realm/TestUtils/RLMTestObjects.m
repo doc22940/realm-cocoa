@@ -78,13 +78,31 @@
 #pragma mark AllTypesObject
 
 @implementation AllTypesObject
-+ (NSDictionary *)linkingObjectsProperties
-{
-    return @{ @"linkingObjectsCol": [RLMPropertyDescriptor descriptorWithClass:LinkToAllTypesObject.class propertyName:@"allTypesCol"] };
++ (NSDictionary *)linkingObjectsProperties {
+    return @{@"linkingObjectsCol": [RLMPropertyDescriptor descriptorWithClass:LinkToAllTypesObject.class propertyName:@"allTypesCol"]};
 }
-+ (NSArray *)requiredProperties
-{
-    return @[@"stringCol", @"dateCol", @"binaryCol"];
+
++ (NSArray *)requiredProperties {
+    return @[@"stringCol", @"dateCol", @"binaryCol", @"decimalCol", @"objectIdCol"];
+}
+
++ (NSDictionary *)values:(int)i stringObject:(StringObject *)so {
+    char str[] = "a";
+    str[0] += i - 1;
+    return @{
+        @"boolCol": @(i % 2),
+        @"cBoolCol": @(i % 2),
+        @"intCol": @(i),
+        @"floatCol": @(1.1f * i),
+        @"doubleCol": @(1.11 * i),
+        @"stringCol": @(str),
+        @"binaryCol": [@(str) dataUsingEncoding:NSUTF8StringEncoding],
+        @"dateCol": [NSDate dateWithTimeIntervalSince1970:i],
+        @"longCol": @(i),
+        @"decimalCol": [[RLMDecimal128 alloc] initWithNumber:@(i)],
+        @"objectIdCol": [RLMObjectId objectId],
+        @"objectCol": so ?: NSNull.null,
+    };
 }
 @end
 
@@ -98,7 +116,8 @@
 @end
 @implementation AllPrimitiveArrays
 + (NSArray *)requiredProperties {
-    return @[@"intObj", @"floatObj", @"doubleObj", @"boolObj", @"stringObj", @"dateObj", @"dataObj"];
+    return @[@"intObj", @"floatObj", @"doubleObj", @"boolObj", @"stringObj",
+             @"dateObj", @"dataObj", @"decimalObj", @"objectIdObj"];
 }
 @end
 @implementation AllOptionalPrimitiveArrays

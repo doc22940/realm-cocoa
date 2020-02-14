@@ -26,6 +26,8 @@
 #import "RLMProperty_Private.h"
 #import "RLMSchema_Private.h"
 #import "RLMSwiftSupport.h"
+#import <Realm/RLMDecimal128.h>
+#import <Realm/RLMObjectId.h>
 
 #import "shared_realm.hpp"
 
@@ -188,6 +190,11 @@ BOOL RLMValidateValue(__unsafe_unretained id const value,
             RLMObjectBase *objBase = RLMDynamicCast<RLMObjectBase>(value);
             return objBase && [objBase->_objectSchema.className isEqualToString:objectClassName];
         }
+        case RLMPropertyTypeObjectId:
+            return NO;
+        case RLMPropertyTypeDecimal128:
+            return NO;
+//            return [value isKindOfClass:[NSNumber class]] || [value isKindOfClass:[RLMDecimal128 class]];
     }
     @throw RLMException(@"Invalid RLMPropertyType specified");
 }
@@ -409,6 +416,7 @@ id RLMMixedToObjc(realm::Mixed const& mixed) {
         case realm::type_Link:
         case realm::type_LinkList:
         default:
+            // FIXME: decimal/oid
             @throw RLMException(@"Invalid data type for RLMPropertyTypeAny property.");
     }
 }

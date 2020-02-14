@@ -122,9 +122,13 @@ RLM_ARRAY_TYPE(IntObject)
 @property NSData       *binaryCol;
 @property NSDate       *dateCol;
 @property bool          cBoolCol;
-@property int64_t     longCol;
+@property int64_t       longCol;
+@property RLMDecimal128 *decimalCol;
+@property RLMObjectId  *objectIdCol;
 @property StringObject *objectCol;
 @property (readonly) RLMLinkingObjects *linkingObjectsCol;
+
++ (NSDictionary *)values:(int)i stringObject:(StringObject *)so;
 
 @end
 
@@ -146,6 +150,8 @@ RLM_ARRAY_TYPE(AllTypesObject)
 @property NSString *string;
 @property NSData *data;
 @property NSDate *date;
+@property RLMDecimal128 *decimal;
+@property RLMObjectId *objectId;
 @end
 
 @interface AllOptionalTypesPK : RLMObject
@@ -158,6 +164,8 @@ RLM_ARRAY_TYPE(AllTypesObject)
 @property NSString *string;
 @property NSData *data;
 @property NSDate *date;
+@property RLMDecimal128 *decimal;
+@property RLMObjectId *objectId;
 @end
 
 @interface AllPrimitiveArrays : RLMObject
@@ -168,6 +176,8 @@ RLM_ARRAY_TYPE(AllTypesObject)
 @property RLMArray<RLMString> *stringObj;
 @property RLMArray<RLMDate> *dateObj;
 @property RLMArray<RLMData> *dataObj;
+@property RLMArray<RLMDecimal128> *decimalObj;
+@property RLMArray<RLMObjectId> *objectIdObj;
 @end
 
 @interface AllOptionalPrimitiveArrays : RLMObject
@@ -178,6 +188,8 @@ RLM_ARRAY_TYPE(AllTypesObject)
 @property RLMArray<RLMString> *stringObj;
 @property RLMArray<RLMDate> *dateObj;
 @property RLMArray<RLMData> *dataObj;
+@property RLMArray<RLMDecimal128> *decimalObj;
+@property RLMArray<RLMObjectId> *objectIdObj;
 @end
 
 #pragma mark - Real Life Objects
